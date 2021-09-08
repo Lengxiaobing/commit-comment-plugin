@@ -1,0 +1,2 @@
+# commit-comment-plugin
+init
