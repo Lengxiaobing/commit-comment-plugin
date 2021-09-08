@@ -1,0 +1,32 @@
+<idea-plugin>
+    <id>commit-comment-plugin-zh-cn</id>
+    <name>Commit Comment</name>
+    <version>1.0.0</version>
+
+    <vendor email="tn787681084@gmail.com" />
+
+    <description><![CDATA[
+        <h1>提交信息生成插件</h1>
+        <p>提交信息模板生成插件，用于规范代码提交信息</p>
+        <p>代码引用了插件：Git Commit Template 只是做了中文翻译</p>
+        <p>源码地址：https://github.com/MobileTribe/commit-template-idea-plugin</p>
+    ]]></description>
+
+    <idea-version since-build="212"/>
+
+    <depends>com.intellij.modules.vcs</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <actions>
+        <action id="Commit.Comment.Button" class="com.marmot.commit.CreateCommitAction"
+                text="Create commit message"
+                description="创建提交消息"
+                icon="/icons/load.png">
+            <add-to-group group-id="Vcs.MessageActionGroup" anchor="first"/>
+        </action>
+    </actions>
+
+</idea-plugin>
