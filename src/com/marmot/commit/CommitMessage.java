@@ -14,10 +14,10 @@ import static org.apache.commons.lang.StringUtils.isNotBlank;
 class CommitMessage {
     private static final int MAX_LINE_LENGTH = 72; // https://stackoverflow.com/a/2120040/5138796
 
-    public static final Pattern COMMIT_FIRST_LINE_FORMAT = Pattern.compile("^([a-z]+)(\\((.+)\\))?: (.+)");
-    public static final Pattern COMMIT_CLOSES_FORMAT = Pattern.compile("Closes (.+)");
+    public static final Pattern COMMIT_FIRST_LINE_FORMAT = Pattern.compile("^(\\[(.+)])(\\((.+)\\))?: (.+)");
+    public static final Pattern COMMIT_CLOSES_FORMAT = Pattern.compile("关闭问题: (.+)");
 
-    private ChangeType changeType;
+    private String changeType;
     private String changeScope, shortDescription, longDescription, breakingChanges, closedIssues;
     private boolean wrapText = true;
     private boolean skipCI = false;
@@ -28,7 +28,7 @@ class CommitMessage {
         this.closedIssues = "";
     }
 
-    public CommitMessage(ChangeType changeType, String changeScope, String shortDescription, String longDescription,
+    public CommitMessage(String changeType, String changeScope, String shortDescription, String longDescription,
                          String breakingChanges, String closedIssues, boolean wrapText, boolean skipCI) {
         this.changeType = changeType;
         this.changeScope = changeScope;
@@ -43,7 +43,9 @@ class CommitMessage {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append(changeType.label());
+        builder.append("[");
+        builder.append(changeType);
+        builder.append("]");
         if (isNotBlank(changeScope)) {
             builder
                     .append('(')
@@ -62,7 +64,7 @@ class CommitMessage {
         }
 
         if (isNotBlank(breakingChanges)) {
-            String content = "BREAKING CHANGE: " + breakingChanges;
+            String content = "重大改进: " + breakingChanges;
             builder
                     .append(System.lineSeparator())
                     .append(System.lineSeparator())
@@ -74,7 +76,7 @@ class CommitMessage {
             for (String closedIssue : closedIssues.split(",")) {
                 builder
                         .append(System.lineSeparator())
-                        .append("Closes ")
+                        .append("关闭问题: ")
                         .append(formatClosedIssue(closedIssue));
             }
         }
@@ -83,7 +85,7 @@ class CommitMessage {
             builder
                     .append(System.lineSeparator())
                     .append(System.lineSeparator())
-                    .append("[skip ci]");
+                    .append("[跳过 ci]");
         }
 
         return builder.toString();
@@ -99,14 +101,18 @@ class CommitMessage {
 
         try {
             Matcher matcher = COMMIT_FIRST_LINE_FORMAT.matcher(message);
-            if (!matcher.find()) return commitMessage;
+            if (!matcher.find()) {
+                return commitMessage;
+            }
 
-            commitMessage.changeType = ChangeType.valueOf(matcher.group(1).toUpperCase());
-            commitMessage.changeScope = matcher.group(3);
-            commitMessage.shortDescription = matcher.group(4);
+            commitMessage.changeType = matcher.group(1).replace("[","").replace("]","");
+            commitMessage.changeScope = matcher.group(3).replace("(","").replace(")","");
+            commitMessage.shortDescription = matcher.group(5);
 
             String[] strings = message.split("\n");
-            if (strings.length < 2) return commitMessage;
+            if (strings.length < 2) {
+                return commitMessage;
+            }
 
             int pos = 1;
             StringBuilder stringBuilder;
@@ -114,8 +120,9 @@ class CommitMessage {
             stringBuilder = new StringBuilder();
             for (; pos < strings.length; pos++) {
                 String lineString = strings[pos];
-                if (lineString.startsWith("BREAKING") || lineString.startsWith("Closes") || lineString.equalsIgnoreCase("[skip ci]"))
+                if (lineString.startsWith("重大改进") || lineString.startsWith("关闭问题") || lineString.equalsIgnoreCase("[跳过 ci]")) {
                     break;
+                }
                 stringBuilder.append(lineString).append('\n');
             }
             commitMessage.longDescription = stringBuilder.toString().trim();
@@ -123,27 +130,31 @@ class CommitMessage {
             stringBuilder = new StringBuilder();
             for (; pos < strings.length; pos++) {
                 String lineString = strings[pos];
-                if (lineString.startsWith("Closes") || lineString.equalsIgnoreCase("[skip ci]")) break;
+                if (lineString.startsWith("关闭问题") || lineString.equalsIgnoreCase("[跳过 ci]")) {
+                    break;
+                }
                 stringBuilder.append(lineString).append('\n');
             }
-            commitMessage.breakingChanges = stringBuilder.toString().trim().replace("BREAKING CHANGE: ", "");
+            commitMessage.breakingChanges = stringBuilder.toString().trim().replace("重大改进: ", "");
 
             matcher = COMMIT_CLOSES_FORMAT.matcher(message);
             stringBuilder = new StringBuilder();
             while (matcher.find()) {
                 stringBuilder.append(matcher.group(1)).append(',');
             }
-            if (stringBuilder.length() > 0) stringBuilder.delete(stringBuilder.length() - 1, stringBuilder.length());
+            if (stringBuilder.length() > 0) {
+                stringBuilder.delete(stringBuilder.length() - 1, stringBuilder.length());
+            }
             commitMessage.closedIssues = stringBuilder.toString();
 
-            commitMessage.skipCI = message.contains("[skip ci]");
+            commitMessage.skipCI = message.contains("[跳过 ci]");
         } catch (RuntimeException e) {
         }
 
         return commitMessage;
     }
 
-    public ChangeType getChangeType() {
+    public String getChangeType() {
         return changeType;
     }
 

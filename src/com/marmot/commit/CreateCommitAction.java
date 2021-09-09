@@ -18,8 +18,9 @@ public class CreateCommitAction extends AnAction implements DumbAware {
     @Override
     public void actionPerformed(AnActionEvent actionEvent) {
         CommitMessageI commitPanel = getCommitPanel(actionEvent);
-        if (commitPanel == null) return;
-
+        if (commitPanel == null) {
+            return;
+        }
         CommitMessage commitMessage = parseExistingCommitMessage(commitPanel);
         CommitDialog dialog = new CommitDialog(actionEvent.getProject(), commitMessage);
         dialog.show();

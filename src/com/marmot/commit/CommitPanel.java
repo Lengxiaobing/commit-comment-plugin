@@ -1,15 +1,21 @@
 package com.marmot.commit;
 
+import com.intellij.dvcs.repo.Repository;
+import com.intellij.dvcs.repo.VcsRepositoryManager;
 import com.intellij.openapi.project.Project;
 
 import javax.swing.*;
 import java.io.File;
-import java.util.Enumeration;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author Damien Arrachequesne
  */
 public class CommitPanel {
+    private final static String SEPARATOR = "-";
+
     private JPanel mainPanel;
     private JComboBox<String> changeScope;
     private JTextField shortDescription;
@@ -18,25 +24,19 @@ public class CommitPanel {
     private JTextField closedIssues;
     private JCheckBox wrapTextCheckBox;
     private JCheckBox skipCICheckBox;
-    private JRadioButton featRadioButton;
-    private JRadioButton fixRadioButton;
-    private JRadioButton docsRadioButton;
-    private JRadioButton styleRadioButton;
-    private JRadioButton refactorRadioButton;
-    private JRadioButton perfRadioButton;
-    private JRadioButton testRadioButton;
-    private JRadioButton buildRadioButton;
-    private JRadioButton ciRadioButton;
-    private JRadioButton choreRadioButton;
-    private JRadioButton revertRadioButton;
-    private ButtonGroup changeTypeGroup;
+    private JComboBox<String> commitType;
 
     CommitPanel(Project project, CommitMessage commitMessage) {
-        File workingDirectory = new File(project.getBasePath());
-        GitLogQuery.Result result = new GitLogQuery(workingDirectory).execute();
-        if (result.isSuccess()) {
-            changeScope.addItem(""); // no value by default
-            result.getScopes().forEach(changeScope::addItem);
+        //获取当前分支名
+        Collection<Repository> repositories = VcsRepositoryManager.getInstance(project).getRepositories();
+        for (Repository repository : repositories) {
+            String branchName = repository.getCurrentBranchName();
+            changeScope.addItem(branchName);
+        }
+
+        Map<String, String> typeMap = DataSettings.getCommitTypeMap();
+        for (Map.Entry<String, String> entry : typeMap.entrySet()) {
+            commitType.addItem(entry.getKey() + SEPARATOR + entry.getValue());
         }
 
         if (commitMessage != null) {
@@ -61,26 +61,20 @@ public class CommitPanel {
         );
     }
 
-    private ChangeType getSelectedChangeType() {
-        for (Enumeration<AbstractButton> buttons = changeTypeGroup.getElements(); buttons.hasMoreElements();) {
-            AbstractButton button = buttons.nextElement();
-
-            if (button.isSelected()) {
-                return ChangeType.valueOf(button.getActionCommand().toUpperCase());
-            }
+    private String getSelectedChangeType() {
+        Object item = commitType.getSelectedItem();
+        if (Objects.isNull(item)) {
+            return null;
         }
-        return null;
+
+        return item.toString().split(SEPARATOR)[0];
     }
 
     private void restoreValuesFromParsedCommitMessage(CommitMessage commitMessage) {
-        if (commitMessage.getChangeType() != null) {
-            for (Enumeration<AbstractButton> buttons = changeTypeGroup.getElements(); buttons.hasMoreElements();) {
-                AbstractButton button = buttons.nextElement();
-
-                if (button.getActionCommand().equalsIgnoreCase(commitMessage.getChangeType().label())) {
-                    button.setSelected(true);
-                }
-            }
+        String key = commitMessage.getChangeType();
+        String value = DataSettings.getValue(commitMessage.getChangeType());
+        if (Objects.nonNull(key) && Objects.nonNull(value)) {
+            commitType.setSelectedItem(key + SEPARATOR + value);
         }
         changeScope.setSelectedItem(commitMessage.getChangeScope());
         shortDescription.setText(commitMessage.getShortDescription());
