@@ -7,8 +7,8 @@
     <description><![CDATA[
         <h1>提交信息生成插件</h1>
         <p>提交信息模板生成插件，用于规范代码提交信息</p>
-        <p>代码引用了插件：Git Commit Template 只是做了中文翻译</p>
-        <p>源码地址：https://github.com/MobileTribe/commit-template-idea-plugin</p>
+        <p>借鉴了<a href='https://github.com/MobileTribe/commit-template-idea-plugin'>Git Commit Template<a>插件, 并做了中文翻译和布局更改</p>
+        <p>源码地址：https://github.com/Lengxiaobing/commit-comment-plugin</p>
     ]]></description>
 
     <idea-version since-build="171"/>
