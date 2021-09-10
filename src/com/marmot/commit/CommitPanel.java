@@ -5,7 +5,6 @@ import com.intellij.dvcs.repo.VcsRepositoryManager;
 import com.intellij.openapi.project.Project;
 
 import javax.swing.*;
-import java.io.File;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
