@@ -1,8 +1,8 @@
 <idea-plugin>
-    <id>commit-comment-plugin-zh-cn</id>
+    <id>commit.comment.plugin.zh_CN</id>
     <name>Commit Comment</name>
-    <version>1.0.0</version>
-    <vendor email="tn787681084@gmail.com" url="https://github.com/Lengxiaobing/commit-comment-plugin">冷小冰</vendor>
+    <version>1.0.2</version>
+    <vendor email="tn787681084@gmail.com" url="https://github.com/Lengxiaobing/commit-comment-plugin">zhu xiang</vendor>
 
     <description><![CDATA[
         <h1>git commit information generation plugin</h1>
