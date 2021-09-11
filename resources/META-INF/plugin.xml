@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>commit.comment.plugin.zh_CN</id>
     <name>Commit Comment</name>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <vendor email="tn787681084@gmail.com" url="https://github.com/Lengxiaobing/commit-comment-plugin">zhu xiang</vendor>
 
     <description><![CDATA[
