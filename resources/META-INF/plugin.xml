@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>commit.comment.plugin.zh_CN</id>
     <name>Commit Comment</name>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <vendor email="tn787681084@gmail.com" url="https://github.com/Lengxiaobing/commit-comment-plugin">zhu xiang</vendor>
 
     <description><![CDATA[
@@ -10,6 +10,11 @@
         <p>Special thanks: <a href='https://github.com/MobileTribe/commit-template-idea-plugin'>Damien Arrachequesne</a></p>
         <p>Source Code：<a href='https://github.com/Lengxiaobing/commit-comment-plugin'>https://github.com/Lengxiaobing/commit-comment-plugin</a></p>
     ]]></description>
+
+    <change-notes><![CDATA[
+      Modify the plug-in layout and increase the submission type
+    ]]>
+    </change-notes>
 
     <idea-version since-build="171"/>
 

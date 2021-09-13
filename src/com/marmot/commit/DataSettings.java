@@ -17,6 +17,7 @@ public class DataSettings {
         Map<String, String> map = new LinkedHashMap<>(16);
         map.put("新增功能", "新的功能、新的需求");
         map.put("Bug修复", "修复代码Bug(测试、验收等阶段的Bug)");
+        map.put("代码完善", "开发自测过程中遗漏的代码逻辑");
         map.put("文档修改", "仅文档更改(代码注释、README等)");
         map.put("样式修改", "不影响代码功能的修改 (CSS样式、代码格式化等)");
         map.put("代码重构", "既不修复错误也不添加功能的代码更改");

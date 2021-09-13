@@ -3,6 +3,8 @@ package com.marmot.commit;
 import com.intellij.dvcs.repo.Repository;
 import com.intellij.dvcs.repo.VcsRepositoryManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.vcs.log.data.index.VcsLogBigRepositoriesList;
+import com.intellij.vcs.log.data.index.VcsLogFullDetailsIndex;
 
 import javax.swing.*;
 import java.util.Collection;
