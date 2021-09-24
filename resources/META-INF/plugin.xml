@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>commit.comment.plugin.zh_CN</id>
     <name>Commit Comment</name>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <vendor email="tn787681084@gmail.com" url="https://github.com/Lengxiaobing/commit-comment-plugin">zhu xiang</vendor>
 
     <description><![CDATA[
@@ -12,7 +12,8 @@
     ]]></description>
 
     <change-notes><![CDATA[
-      Modify the plug-in layout and increase the submission type
+      1.Changing the Default Height.
+      2.skip ci
     ]]>
     </change-notes>
 
