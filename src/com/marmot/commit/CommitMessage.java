@@ -85,7 +85,7 @@ class CommitMessage {
             builder
                     .append(System.lineSeparator())
                     .append(System.lineSeparator())
-                    .append("[跳过 ci]");
+                    .append("[skip ci]");
         }
 
         return builder.toString();
@@ -120,7 +120,7 @@ class CommitMessage {
             stringBuilder = new StringBuilder();
             for (; pos < strings.length; pos++) {
                 String lineString = strings[pos];
-                if (lineString.startsWith("重大改进") || lineString.startsWith("关闭问题") || lineString.equalsIgnoreCase("[跳过 ci]")) {
+                if (lineString.startsWith("重大改进") || lineString.startsWith("关闭问题") || lineString.equalsIgnoreCase("[skip ci]")) {
                     break;
                 }
                 stringBuilder.append(lineString).append('\n');
@@ -130,7 +130,7 @@ class CommitMessage {
             stringBuilder = new StringBuilder();
             for (; pos < strings.length; pos++) {
                 String lineString = strings[pos];
-                if (lineString.startsWith("关闭问题") || lineString.equalsIgnoreCase("[跳过 ci]")) {
+                if (lineString.startsWith("关闭问题") || lineString.equalsIgnoreCase("[skip ci]")) {
                     break;
                 }
                 stringBuilder.append(lineString).append('\n');
@@ -147,7 +147,7 @@ class CommitMessage {
             }
             commitMessage.closedIssues = stringBuilder.toString();
 
-            commitMessage.skipCI = message.contains("[跳过 ci]");
+            commitMessage.skipCI = message.contains("[skip ci]");
         } catch (RuntimeException e) {
         }
 
